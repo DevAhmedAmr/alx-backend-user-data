@@ -6,8 +6,18 @@ import re
 
 
 def filter_datum(fields: list[str], redaction: str,
-                 message: str, separator: str):
-    """This function is called when the datum has been modified .
+                 message: str, separator: str) -> str:
+    """
+    Filter out fields that are not in fields arg list .
+
+    Args:
+        fields (list[str]): [description]
+        redaction (str): [description]
+        message (str): [description]
+        separator (str): [description]
+
+    Returns:
+        [type]: [description]
     """
 
     pattern = r"(" + "|".join(re.escape(field)
