@@ -24,6 +24,4 @@ def filter_datum(fields: List[str], redaction: str,
     pattern = r"(" + "|".join(re.escape(field)
                               for field in fields) + f")=[^{separator}]*"
 
-    print(re.search(pattern, message))
-
     return re.sub(pattern, r"\1=" + redaction, message)
