@@ -3,9 +3,10 @@
 Module for handling Personal Data
 """
 import re
+from typing import List
 
 
-def filter_datum(fields: list[str], redaction: str,
+def filter_datum(fields: List[str], redaction: str,
                  message: str, separator: str) -> str:
     """
     Filter out fields that are not in fields arg list .
