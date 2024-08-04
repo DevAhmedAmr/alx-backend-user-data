@@ -72,6 +72,3 @@ def get_logger() -> logging.Logger:
 
 
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
-
-print(get_logger.__annotations__.get('return'))
-print("PII_FIELDS: {}".format(len(PII_FIELDS)))
