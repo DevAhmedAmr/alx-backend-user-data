@@ -2,14 +2,16 @@
 """
 Module for handling Personal Data
 """
+import logging.handlers
 import re
 from typing import List
 import logging
 
 
 class RedactingFormatter(logging.Formatter):
-    """ Redacting Formatter class
-        """
+    """
+    Redacting Formatter class
+    """
 
     REDACTION = "***"
     FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
@@ -54,3 +56,17 @@ def filter_datum(fields: List[str], redaction: str,
                               for field in fields) + f")=[^{separator}]*"
 
     return re.sub(pattern, r"\1=" + redaction, message)
+
+
+def get_logger() -> logging.Logger:
+    logger = logging.Logger("user_data", logging.INFO)
+    handler = logging.StreamHandler()
+    handler.setFormatter(RedactingFormatter(PII_FIELDS))
+    logger.addHandler(handler)
+    return logger
+
+
+PII_FIELDS = ("name", "email", "phone", "ssn", "password")
+
+print(get_logger.__annotations__.get('return'))
+print("PII_FIELDS: {}".format(len(PII_FIELDS)))
