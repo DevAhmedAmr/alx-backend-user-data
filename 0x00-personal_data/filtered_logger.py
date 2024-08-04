@@ -77,25 +77,15 @@ def get_logger() -> logging.Logger:
     return logger
 
 
-def get_db() -> mysql.connector.connection.MySQLConnection:
-    """
-    Get a mysql database connection from environment
-        variables .
-
-    Returns:
-        mysql.connector.connection.MySQLConnection: MySQLConnection object
-    """
-    username = os.getenv("PERSONAL_DATA_DB_USERNAME", 'root')
-    password = os.getenv("PERSONAL_DATA_DB_PASSWORD", "")
-    host = os.getenv("PERSONAL_DATA_DB_HOST", "localhost")
-    dataBase_name = os.getenv("PERSONAL_DATA_DB_NAME")
-    mydb = mysql.connector.connect(
+def get_db() -> mysql.connector.connection.MYSQLConnection:
+    """ Connection to MySQL environment """
+    db_connect = mysql.connector.connect(
         user=os.getenv('PERSONAL_DATA_DB_USERNAME', 'root'),
         password=os.getenv('PERSONAL_DATA_DB_PASSWORD', ''),
         host=os.getenv('PERSONAL_DATA_DB_HOST', 'localhost'),
         database=os.getenv('PERSONAL_DATA_DB_NAME')
     )
-    return mydb
+    return db_connect
 
 
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
