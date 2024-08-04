@@ -41,9 +41,11 @@ def filter_datum(fields: List[str], redaction: str,
     Filter out fields that are not in fields arg list .
 
     Args:
-        fields (list[str]): a list of strings representing all fields to obfuscate
+        fields (list[str]): a list of strings representing all fields to
+        obfuscate
 
-        redaction (str): a string representing by what the field will be obfuscated
+        redaction (str): a string representing by what the field will be
+        obfuscated
 
         message (str):  a string representing the log line
 
@@ -76,6 +78,13 @@ def get_logger() -> logging.Logger:
 
 
 def get_db() -> mysql.connector.connection.MySQLConnection:
+    """
+    Get a mysql database connection from environment
+        variables .
+
+    Returns:
+        mysql.connector.connection.MySQLConnection: [description]
+    """
     username = os.getenv("PERSONAL_DATA_DB_USERNAME")
     password = os.getenv("PERSONAL_DATA_DB_PASSWORD")
     host = os.getenv("PERSONAL_DATA_DB_HOST")
