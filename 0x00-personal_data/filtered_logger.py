@@ -83,7 +83,7 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
         variables .
 
     Returns:
-        mysql.connector.connection.MySQLConnection: [description]
+        mysql.connector.connection.MySQLConnection: MySQLConnection object
     """
     username = os.getenv("PERSONAL_DATA_DB_USERNAME", 'root')
     password = os.getenv("PERSONAL_DATA_DB_PASSWORD", "")
