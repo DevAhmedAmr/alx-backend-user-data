@@ -8,7 +8,7 @@ import bcrypt
 # example password
 
 
-def hash_password(password) -> str:
+def hash_password(password: str) -> bytes:
     """Hash a password
 
     Args:
