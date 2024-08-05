@@ -85,10 +85,12 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
     Returns:
         mysql.connector.connection.MySQLConnection: MySQLConnection object
     """
+
     username = os.getenv("PERSONAL_DATA_DB_USERNAME", 'root')
     password = os.getenv("PERSONAL_DATA_DB_PASSWORD", "")
     host = os.getenv("PERSONAL_DATA_DB_HOST", "localhost")
     dataBase_name = os.getenv("PERSONAL_DATA_DB_NAME")
+
     mydb = mysql.connector.connect(
         host=host,
         user=username,
@@ -99,3 +101,22 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
 
 
 PII_FIELDS = ("name", "email", "phone", "ssn", "password")
+
+
+def main():
+    logger = get_logger()
+    connection = get_db()
+    cursor = connection.cursor(dictionary=True)
+
+    cursor.execute("SELECT * FROM users")
+    rows = cursor.fetchall()
+
+    for dict in rows:
+        list = []
+        for key, value in dict.items():
+            list.append(f"{key}={value}")
+        logger.info("; ".join(list) + ";")
+
+
+if __name__ == "__main__":
+    main()
