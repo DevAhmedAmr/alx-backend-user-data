@@ -8,7 +8,15 @@ import bcrypt
 # example password
 
 
-def hash_password(password):
+def hash_password(password) -> str:
+    """Hash a password
+
+    Args:
+        password ([type]): [description]
+
+    Returns:
+        str: hashed password
+    """
     # converting password to array of bytes
     bytes = password.encode('utf-8')
 
