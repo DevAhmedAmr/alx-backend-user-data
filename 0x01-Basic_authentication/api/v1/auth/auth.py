@@ -1,4 +1,10 @@
 #!/usr/bin/python3
+"""
+Auth class.
+
+	Returns:
+		[type]: [description]
+"""
 from flask import request
 from typing import List, TypeVar
 
