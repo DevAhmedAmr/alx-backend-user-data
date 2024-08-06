@@ -34,7 +34,7 @@ class Auth:
                         Defaults to None.
 
                 Returns:
-                        str: [description]
+                        str: Authorization header
                 """
         if not request or not request.headers.get("Authorization"):
             return None

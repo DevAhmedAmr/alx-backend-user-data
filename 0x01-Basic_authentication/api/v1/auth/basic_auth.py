@@ -87,6 +87,7 @@ class BasicAuth(Auth):
 
         if not user_pwd or not isinstance(user_pwd, str):
             return None
+
         users = User.search({"email": user_email})
 
         if not users:
@@ -96,3 +97,16 @@ class BasicAuth(Auth):
             return None
 
         return users[0]
+
+    def current_user(self, request=None) -> TypeVar('User'):
+        try:
+            auth_header = self.authorization_header(request)
+            encoded_usr_pw = self.extract_base64_authorization_header(
+                auth_header)
+            decoded_email_pw = self.decode_base64_authorization_header(
+                encoded_usr_pw)
+            user, pw = self.extract_user_credentials(decoded_email_pw)
+            user = self.user_object_from_credentials(user, pw)
+            return user
+        except BaseException:
+            return None
