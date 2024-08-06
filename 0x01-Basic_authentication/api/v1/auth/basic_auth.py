@@ -2,9 +2,10 @@
 """
     BasicAuth .
 """
-# from api.v1.auth.auth import Auth
+from api.v1.auth.auth import Auth
+
 import base64
-from auth import Auth
+# from auth import Auth
 
 
 class BasicAuth(Auth):
@@ -50,14 +51,3 @@ class BasicAuth(Auth):
 
         except Exception:
             return None
-
-
-a = BasicAuth()
-
-print(a.decode_base64_authorization_header(None))
-print(a.decode_base64_authorization_header(89))
-print(a.decode_base64_authorization_header("Holberton School"))
-print(a.decode_base64_authorization_header("SG9sYmVydG9u"))
-print(a.decode_base64_authorization_header("SG9sYmVydG9uIFNjaG9vbA=="))
-print(a.decode_base64_authorization_header(
-    a.extract_base64_authorization_header("Basic SG9sYmVydG9uIFNjaG9vbA==")))
