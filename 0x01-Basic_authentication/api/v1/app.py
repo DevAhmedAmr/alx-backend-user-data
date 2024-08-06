@@ -39,7 +39,7 @@ def forbidden_err(error) -> str:
     return jsonify({"error": "Forbidden"}), 403
 
 
-def f():
+def before_request():
     """Checks if the user has authorized to access the request .
     """
 
@@ -57,7 +57,7 @@ def f():
         abort(403)
 
 
-app.before_request(f)
+app.before_request(before_request)
 
 if __name__ == "__main__":
     host = getenv("API_HOST", "0.0.0.0")
