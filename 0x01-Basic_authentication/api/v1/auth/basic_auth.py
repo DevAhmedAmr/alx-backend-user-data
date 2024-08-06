@@ -99,6 +99,11 @@ class BasicAuth(Auth):
         return users[0]
 
     def current_user(self, request=None) -> TypeVar('User'):
+        """Returns the User object for the current request .
+
+        Returns:
+            [User]: User obj if correct credentials else None
+        """
         try:
             auth_header = self.authorization_header(request)
             encoded_usr_pw = self.extract_base64_authorization_header(
