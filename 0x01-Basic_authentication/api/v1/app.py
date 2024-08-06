@@ -10,8 +10,8 @@ import os
 auth = os.getenv("AUTH_TYPE")
 
 if auth:
-    from api.v1.auth.auth import Auth as Authentication
-    auth = Authentication()
+    from api.v1.auth.basic_auth import BasicAuth
+    auth = BasicAuth()
 
 app = Flask(__name__)
 app.register_blueprint(app_views)
