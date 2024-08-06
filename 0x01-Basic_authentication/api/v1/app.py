@@ -40,6 +40,8 @@ def forbidden_err(error) -> str:
 
 
 def f():
+    """Checks if the user has authorized to access the request .
+    """
 
     if not auth:
         return
