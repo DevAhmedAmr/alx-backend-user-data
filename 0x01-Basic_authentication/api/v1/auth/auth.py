@@ -10,6 +10,9 @@ from typing import List, TypeVar
 
 
 class Auth:
+    """A class method that handles the Auth class .
+        """
+
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
         """Require authentication to be used for this client .
 
