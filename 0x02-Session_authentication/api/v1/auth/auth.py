@@ -51,6 +51,14 @@ class Auth:
         return None
 
     def session_cookie(self, request=None):
+        """Returns the session cookie if it is not set .
+
+            Args:
+                request ([flask_request], optional): Defaults to None.
+
+            Returns:
+                [dict]: cookie value from request
+            """
         if request is None:
             return request
 
