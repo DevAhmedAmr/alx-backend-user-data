@@ -8,7 +8,6 @@ from models.user import User
 import base64
 from uuid import uuid4
 from flask import Flask
-from views import app_views
 
 
 class SessionAuth(Auth):
