@@ -62,6 +62,5 @@ class Auth:
         if request is None:
             return request
 
-        if os.getenv("SESSION_NAME") in request.cookies:
-            return request.cookies.get(os.getenv("SESSION_NAME"))
+        return request.cookies.get(os.getenv("SESSION_NAME"))
 # SESSION_NAME
