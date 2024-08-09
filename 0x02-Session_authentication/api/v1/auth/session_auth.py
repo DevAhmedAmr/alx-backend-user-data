@@ -42,3 +42,10 @@ class SessionAuth(Auth):
 
         if session_id in SessionAuth.user_id_by_session_id:
             return SessionAuth.user_id_by_session_id[session_id]
+
+    def current_user(self, request=None):
+        """ (overload) that returns a User instance based on a cookie value:
+        """
+        session_name = self.session_cookie(request)
+        # print(session_name, SessionAuth.user_id_by_session_id)
+        return User.get(self.user_id_for_session_id(session_name))
