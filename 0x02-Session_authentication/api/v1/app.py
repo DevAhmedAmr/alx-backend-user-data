@@ -65,7 +65,8 @@ def before_request():
     request.current_user = auth.current_user(request)
 
     if not auth.authorization_header(
-            request) or not auth.session_cookie(request):
+            request) and not auth.session_cookie(request):
+
         abort(401, description="Unauthorized")
 
     if not request.current_user:
