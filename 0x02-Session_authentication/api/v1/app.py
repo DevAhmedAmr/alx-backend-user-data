@@ -46,6 +46,7 @@ def forbidden_err(error) -> str:
     return jsonify({"error": "Forbidden"}), 403
 
 
+@app.before_request
 def before_request():
     """
     Checks if the user has authorized to access the request .
@@ -56,18 +57,22 @@ def before_request():
     if not auth.require_auth(request.path, [
         '/api/v1/status/',
         '/api/v1/unauthorized/',
-        '/api/v1/forbidden/']
+        '/api/v1/forbidden/',
+        "/api/v1/auth_session/login/"]
     ):
         return
+    if auth.authorization_header(
+            request) and auth.session_cookie(request):
+        abort(401)
+
     if not auth.authorization_header(request):
         abort(401)
 
     request.current_user = auth.current_user(request)
+
     if not request.current_user:
         abort(403)
 
-
-app.before_request(before_request)
 
 if __name__ == "__main__":
     host = getenv("API_HOST", "0.0.0.0")
