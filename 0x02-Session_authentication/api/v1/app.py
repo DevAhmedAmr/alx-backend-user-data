@@ -47,32 +47,26 @@ def forbidden_err(error) -> str:
 
 
 @app.before_request
-def before_request():
+def bef_req():
     """
-    Checks if the user has authorized to access the request .
+    Filter each request before it's handled by the proper route
     """
-
-    if not auth:
-        return
-    if not auth.require_auth(request.path, [
-        '/api/v1/status/',
-        '/api/v1/unauthorized/',
-        '/api/v1/forbidden/',
-        "/api/v1/auth_session/login/"]
-    ):
-        return
-
-    if not auth.authorization_header(
-            request) and not auth.session_cookie(request):
-        abort(401)
-
-    if not auth.authorization_header(request):
-        abort(401)
-
-    request.current_user = auth.current_user(request)
-
-    if not request.current_user:
-        abort(403)
+    if auth is None:
+        pass
+    else:
+        setattr(request, "current_user", auth.current_user(request))
+        excluded = [
+            '/api/v1/status/',
+            '/api/v1/unauthorized/',
+            '/api/v1/forbidden/',
+            '/api/v1/auth_session/login/'
+        ]
+        if auth.require_auth(request.path, excluded):
+            cookie = auth.session_cookie(request)
+            if auth.authorization_header(request) is None and cookie is None:
+                abort(401, description="Unauthorized")
+            if auth.current_user(request) is None:
+                abort(403, description="Forbidden")
 
 
 if __name__ == "__main__":
