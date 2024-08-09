@@ -31,7 +31,14 @@ class SessionAuth(Auth):
         return uuid
 
     def user_id_for_session_id(self, session_id: str = None) -> str:
+        """
+        Returns the user id for a session id .
+
+        args:
+            session_id: str
+        """
         if not session_id or not isinstance(session_id, str):
             return None
+
         if session_id in SessionAuth.user_id_by_session_id:
             return SessionAuth.user_id_by_session_id[session_id]
