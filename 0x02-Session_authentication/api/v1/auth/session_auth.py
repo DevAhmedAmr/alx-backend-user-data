@@ -50,6 +50,15 @@ class SessionAuth(Auth):
         return User.get(self.user_id_for_session_id(session_name))
 
     def destroy_session(self, request=None):
+        """Destroy a session .
+
+        Args:
+            request ([flask - request])
+
+        Returns:
+            [boolean]: return true if succeeded in destroying the session
+            other wise return false
+        """
         if not request:
             return False
 
