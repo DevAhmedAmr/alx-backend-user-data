@@ -71,6 +71,9 @@ def before_request():
     if not request.current_user:
         abort(403)
 
+    if not auth.authorization_header(request):
+        abort(401)
+
 
 if __name__ == "__main__":
     host = getenv("API_HOST", "0.0.0.0")
