@@ -3,35 +3,19 @@
 """
 import requests
 import base64
+# curl "http://0.0.0.0:5000/api/v1/auth_session/login" -XPOST -d
+# "email=bobsession@hbtn.io" -d "password=fake pwd" -vvv
 
-if __name__ == "__main__":
-    user_email = "u5@hbtn.io"
-    user_pwd = "pwd5"
+r = requests.post(
+    "http://0.0.0.0:50000/api/v1/auth_session/login",
+    data={"email": "bobsession@hbtn.io", "password": "fake pwd"})
+session_id = r.cookies.get("_my_session_id")
 
-    r = requests.post(
-        'http://0.0.0.0:50000/api/v1/auth_session/login',
-        data={
-            'email': user_email,
-            'password': user_pwd})
-    if r.status_code != 200:
-        print("Wrong status code: {}".format(r.status_code))
-        exit(1)
-    if r.headers.get('content-type') != "application/json":
-        print("Wrong content type: {}".format(r.headers.get('content-type')))
-        exit(1)
+r = requests.get(
+    "http://0.0.0.0:50000/api/v1/users/me",
+    cookies={"_my_session_id": session_id})
 
-    try:
-        r_json = r.json()
+r = requests.delete("http://0.0.0.0:50000/api/v1/auth_session/logout",
 
-        r_user_email = r_json.get('email')
-        if r_user_email is None:
-            print("User is not return")
-            exit(1)
-
-        if r_user_email != user_email:
-            print("User returned is not the same: {}".format(r_json))
-            exit(1)
-
-        print("OK", end="")
-    except BaseException:
-        print("Error, not a JSON")
+                    cookies={"_my_session_id": session_id})
+print(r.content)

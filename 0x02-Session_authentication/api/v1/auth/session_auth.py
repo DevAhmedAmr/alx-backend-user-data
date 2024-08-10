@@ -62,8 +62,7 @@ class SessionAuth(Auth):
         if not request:
             return False
 
-        session_id = self.user_id_for_session_id(
-            self.session_cookie((request)))
+        session_id = self.session_cookie((request))
 
         if not session_id:
             return False
