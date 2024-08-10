@@ -17,7 +17,7 @@ def login() -> str:
     Return:
       - user object + session id in cookies
     """
-    from api.v1.auth.session_auth import SessionAuth
+    from api.v1.app import auth
 
     email = request.form.get("email")
     password = request.form.get("password")
@@ -31,7 +31,7 @@ def login() -> str:
     if user[0].password != password:
         return {"error": "wrong password"}, 401
 
-    session_id = SessionAuth().create_session(user[0].id)
+    session_id = auth.create_session(user[0].id)
 
     respone = jsonify(user[0].to_json())
     respone.set_cookie(os.getenv("SESSION_NAME"), session_id)
