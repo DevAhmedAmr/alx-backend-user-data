@@ -6,6 +6,7 @@ from flask import jsonify, abort, request
 from api.v1.views import app_views
 from models.user import User
 import os
+from typing import List
 
 
 @app_views.route('/auth_session/login',
@@ -17,21 +18,23 @@ def login() -> str:
     Return:
       - user object + session id in cookies
     """
-    from api.v1.auth.session_auth import SessionAuth
+    from api.v1.app import auth
 
     email = request.form.get("email")
     password = request.form.get("password")
     if not email:
         return {"error": "email missing"}, 400
+
     if not password:
         return {"error": "password missing"}, 400
-    user = User.search({"email": email})
+
+    user: List[User] = User.search({"email": email})
     if not user:
         return {"error": "no user found for this email"}, 404
     if not user[0].is_valid_password(password):
         return {"error": "wrong password"}, 401
 
-    session_id = SessionAuth().create_session(user[0].id)
+    session_id = auth.create_session(user[0].id)
 
     respone = jsonify(user[0].to_json())
     respone.set_cookie(os.getenv("SESSION_NAME"), session_id)
