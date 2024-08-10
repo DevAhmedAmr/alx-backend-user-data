@@ -47,5 +47,17 @@ class SessionAuth(Auth):
         """ (overload) that returns a User instance based on a cookie value:
         """
         session_name = self.session_cookie(request)
-        # print(session_name, SessionAuth.user_id_by_session_id)
         return User.get(self.user_id_for_session_id(session_name))
+
+    def destroy_session(self, request=None):
+        if not request:
+            return False
+
+        session_id = self.user_id_for_session_id(
+            self.session_cookie((request)))
+
+        if not session_id:
+            return False
+
+        del SessionAuth.user_id_by_session_id[session_id]
+        return True

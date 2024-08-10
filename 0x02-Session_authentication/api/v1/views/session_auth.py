@@ -39,3 +39,19 @@ def login() -> str:
     respone = jsonify(user[0].to_json())
     respone.set_cookie(os.getenv("SESSION_NAME"), session_id)
     return respone
+
+
+@app_views.route('/auth_session/logout',
+                 methods=['DELETE'], strict_slashes=False)
+def logout() -> str:
+    """ GET /api/v1/logout
+                logout end point
+    """
+    from api.v1.app import auth
+
+    logout_status = auth.destroy_session(request)
+
+    if not logout_status:
+        return False, abort(404)
+
+    return {}, 200
