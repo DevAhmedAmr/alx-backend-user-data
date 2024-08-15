@@ -62,7 +62,7 @@ class DB:
         query = select(User).where(
             *(getattr(User, key) == value for key, value in kwargs.items())
         )
-
+        print(query)
         user = self._session.scalars(query).first()
 
         if not user:
