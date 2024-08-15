@@ -29,6 +29,7 @@ def login() -> str:
         return {"error": "password missing"}, 400
 
     user: List[User] = User.search({"email": email})
+
     if not user:
         return {"error": "no user found for this email"}, 404
     if not user[0].is_valid_password(password):
