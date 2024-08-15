@@ -51,17 +51,17 @@ class DB:
         """
         Find user by given kwargs .
                 """
-        attribute = None
-        attr_value = None
+        attributes = []
+        values = []
 
         for att, value in kwargs.items():
 
             if not hasattr(User, att):
                 raise InvalidRequestError
-            attribute = att
-            attr_value = value
 
-        query = select(User).where(getattr(User, attribute) == attr_value)
+        query = select(User).where(
+            *(getattr(User, key) == value for key, value in kwargs.items()))
+
         user = self._session.scalar(query)
 
         if not user:
