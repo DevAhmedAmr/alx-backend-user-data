@@ -74,7 +74,7 @@ class DB:
             value in kwargs.items()
         ]
 
-        user = query.filter(and_(*conditions)).first()
+        user = query.filter(*conditions).first()
 
         if not user:
             raise NoResultFound()
