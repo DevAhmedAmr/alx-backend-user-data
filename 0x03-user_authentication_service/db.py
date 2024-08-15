@@ -7,6 +7,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
 from sqlalchemy.orm.exc import NoResultFound
 from user import Base, User
+from sqlalchemy import select
 
 
 class DB:
@@ -44,4 +45,22 @@ class DB:
         except Exception:
             self._session.rollback()
             user = None
+        return user
+
+    def find_user_by(self, **kwargs):
+        attribute = None
+        attr_value = None
+
+        for att, value in kwargs.items():
+
+            if not hasattr(User, att):
+                raise InvalidRequestError
+            attribute = att
+            attr_value = value
+
+        query = select(User).where(getattr(User, attribute) == attr_value)
+        user = self._session.scalar(query)
+
+        if not user:
+            raise NoResultFound
         return user
