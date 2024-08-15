@@ -35,18 +35,22 @@ class DB:
 
 # session_id
 
+
     def add_user(self, email: str, hashed_password: str) -> User:
-        """Add a user to the db .
-                """
+        """ Creates new User instance and
+            saves them to the database.
+            Args:
+                - email
+                - hashed_password
+            Return:
+                - new User object
+        """
+        session = self._session
         try:
-
-            user = User()
-            user.email = email
-            user.hashed_password = hashed_password
-            self._session.add(user)
-            self._session.commit()
-
+            new_user = User(email=email, hashed_password=hashed_password)
+            session.add(new_user)
+            session.commit()
         except Exception:
-            self._session.rollback()
-            user = None
-        return user
+            session.rollback()
+            new_user = None
+        return new_user
