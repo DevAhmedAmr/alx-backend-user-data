@@ -9,9 +9,10 @@ Base = declarative_base()
 
 
 class User(Base):
-    """Class method to create a user .
-        """
-    __tablename__ = "users"
+    """
+    Class method to create a user .
+    """
+    __tablename__ = 'users'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     email = Column(String(250), nullable=False)
