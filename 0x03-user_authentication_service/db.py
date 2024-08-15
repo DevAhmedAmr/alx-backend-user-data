@@ -58,7 +58,7 @@ class DB:
 
             if not hasattr(User, att):
                 raise InvalidRequestError
-            attributes.append(att)
+            attributes.append(getattr(User, att))
             values.append(value)
 
         # query = select(User).where(
