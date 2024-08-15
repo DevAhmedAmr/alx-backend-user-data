@@ -60,9 +60,10 @@ class DB:
                 raise InvalidRequestError
 
         query = select(User).where(
-            *(getattr(User, key) == value for key, value in kwargs.items()))
+            *(getattr(User, key) == value for key, value in kwargs.items())
+        )
 
-        user = self._session.scalar(query)
+        user = self._session.scalars(query).first()
 
         if not user:
             raise NoResultFound
