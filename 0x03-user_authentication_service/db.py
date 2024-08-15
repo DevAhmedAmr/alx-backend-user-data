@@ -8,6 +8,7 @@ from sqlalchemy.orm.session import Session
 from sqlalchemy.orm.exc import NoResultFound
 from user import Base, User
 from sqlalchemy import select
+from sqlalchemy import and_
 
 
 class DB:
@@ -67,8 +68,13 @@ class DB:
         # user = self._session.scalar(query)
 
         query = self._session.query(User)
-        user = query.filter(
-            *(getattr(User, key) == value for key, value in kwargs.items())).first()
+
+        conditions = [
+            getattr(User, key) == value for key,
+            value in kwargs.items()
+        ]
+
+        user = query.filter(and_(*conditions)).first()
 
         if not user:
             raise NoResultFound()
