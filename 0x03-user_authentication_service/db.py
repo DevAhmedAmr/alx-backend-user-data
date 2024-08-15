@@ -71,6 +71,6 @@ class DB:
             tuple_(*attributes).in_([tuple(values)])).first()
 
         if not user:
-            raise NoResultFound
+            raise NoResultFound()
 
         return user
