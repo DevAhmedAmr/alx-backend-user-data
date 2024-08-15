@@ -48,6 +48,9 @@ class DB:
         return user
 
     def find_user_by(self, **kwargs):
+        """
+        Find user by given kwargs .
+                """
         attribute = None
         attr_value = None
 
