@@ -61,15 +61,16 @@ class DB:
             attributes.append(getattr(User, att))
             values.append(value)
 
-        # query = select(User).where(
-        #     *(getattr(User, key) == value for key, value in kwargs.items())
-        #     )
-        # user = self._session.scalar(query)
+        query = select(User).where(
+            tuple_(*attributes).in_([tuple(values)])
+        )
+        user = self._session.scalar(query)
 
-        query = self._session.query(User)
-        user = query.filter(
-            tuple_(*attributes).in_([tuple(values)])).first()
+        # query = self._session.query(User)
+        # user = query.filter(
+        #     tuple_(*attributes).in_([tuple(values)])).first()
 
         if not user:
             raise NoResultFound
+
         return user
