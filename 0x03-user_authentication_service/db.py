@@ -67,7 +67,8 @@ class DB:
         # user = self._session.scalar(query)
 
         query = self._session.query(User)
-        user = query.filter(tuple_(*attributes).in_([tuple(values)])).first()
+        user = query.filter(
+            *(getattr(User, key) == value for key, value in kwargs.items())).first()
 
         if not user:
             raise NoResultFound()
