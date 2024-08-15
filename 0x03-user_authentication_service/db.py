@@ -9,6 +9,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from user import Base, User
 from sqlalchemy import select
 from sqlalchemy import and_
+from sqlalchemy import update
 
 
 class DB:
@@ -80,3 +81,27 @@ class DB:
             raise NoResultFound()
 
         return user
+
+    def update_user(self, user_id, **kwargs):
+        """Update a user by ID .
+
+        Args:
+            user_id (int): id of user to be updated
+            **kwargs: attributes to be updated
+        Raises:
+            ValueError: if attribute to be updated does not exist
+            in User table
+
+        Returns:
+            None
+        """
+        user = self.find_user_by(**{"id": user_id})
+        session = self._session
+
+        for attr, value in kwargs.items():
+            if not hasattr(User, attr):
+                raise ValueError
+            user.__setattr__(attr, value)
+
+        session.commit()
+        return None
