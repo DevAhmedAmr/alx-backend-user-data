@@ -58,12 +58,16 @@ class DB:
 
             if not hasattr(User, att):
                 raise InvalidRequestError
+            attributes.append(att)
+            values.append(value)
 
-        query = select(User).where(
-            *(getattr(User, key) == value for key, value in kwargs.items())
-        )
-        print(query)
-        user = self._session.scalars(query).first()
+        # query = select(User).where(
+        #     *(getattr(User, key) == value for key, value in kwargs.items())
+        #     )
+        # user = self._session.scalar(query)
+        query = self._session.query(User)
+        user = query.filter(
+            *(getattr(User, key) == value for key, value in kwargs.items())).first()
 
         if not user:
             raise NoResultFound
