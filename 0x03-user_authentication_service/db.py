@@ -35,10 +35,16 @@ class DB:
 
 # session_id
 
-    def add_user(self, email: str, password: str) -> User:
-        user = User()
-        user.email = email
-        user.hashed_password = password
-        self._session.add(user)
-        self._session.commit()
+    def add_user(self, email: str, hashed_password: str) -> User:
+        try:
+
+            user = User()
+            user.email = email
+            user.hashed_password = hashed_password
+            self._session.add(user)
+            self._session.commit()
+
+        except Exception:
+            self._session.rollback()
+            user = None
         return user
