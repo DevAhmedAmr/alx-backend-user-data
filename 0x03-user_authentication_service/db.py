@@ -47,18 +47,19 @@ class DB:
             user = None
         return user
 
-    def find_user_by(self, **kwargs):
+    def find_user_by(self, **kwargs) -> User:
         """
         Find user by given kwargs .
                 """
         attributes = []
         values = []
 
-        for attr, val in kwargs.items():
-            if not hasattr(User, attr):
+        for att, value in kwargs.items():
+
+            if not hasattr(User, att):
                 raise InvalidRequestError()
-            attributes.append(getattr(User, attr))
-            values.append(val)
+            attributes.append(getattr(User, att))
+            values.append(value)
 
         # query = select(User).where(
         #     *(getattr(User, key) == value for key, value in kwargs.items())
