@@ -47,30 +47,25 @@ class DB:
             user = None
         return user
 
-    def find_user_by(self, **kwargs):
+    def find_user_by(self, **kwargs) -> User:
+        """ Find user by a given attribute
+            Args:
+                - Dictionary of attributes to use as search
+                  parameters
+            Return:
+                - User object
         """
-        Find user by given kwargs .
-                """
-        attributes = []
-        values = []
 
-        for att, value in kwargs.items():
+        attrs, vals = [], []
+        for attr, val in kwargs.items():
+            if not hasattr(User, attr):
+                raise InvalidRequestError()
+            attrs.append(getattr(User, attr))
+            vals.append(val)
 
-            if not hasattr(User, att):
-                raise InvalidRequestError
-            attributes.append(getattr(User, att))
-            values.append(value)
-
-        # query = select(User).where(
-        #     *(getattr(User, key) == value for key, value in kwargs.items())
-        #     )
-        # user = self._session.scalar(query)
-
-        query = self._session.query(User)
-        user = query.filter(
-            tuple_(*attributes).in_([tuple(values)])).first()
-
+        session = self._session
+        query = session.query(User)
+        user = query.filter(tuple_(*attrs).in_([tuple(vals)])).first()
         if not user:
             raise NoResultFound()
-
         return user
