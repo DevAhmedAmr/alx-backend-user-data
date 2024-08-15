@@ -36,6 +36,8 @@ class DB:
 # session_id
 
     def add_user(self, email: str, hashed_password: str) -> User:
+        """Add a user to the db .
+                """
         try:
 
             user = User()
