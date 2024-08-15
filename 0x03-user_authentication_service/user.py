@@ -1,16 +1,15 @@
 #!/usr/bin/env python3
-
 """
-Create a user - friendly SQLAlchemy class .
+Users model
 """
 from sqlalchemy import Column, Integer, String
-from sqlalchemy.orm import declarative_base
+from sqlalchemy.ext.declarative import declarative_base
+
 Base = declarative_base()
 
 
 class User(Base):
-    """
-    Class method to create a user .
+    """ Represents user object/table
     """
     __tablename__ = 'users'
 
