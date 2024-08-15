@@ -54,12 +54,11 @@ class DB:
         attributes = []
         values = []
 
-        for att, value in kwargs.items():
-
-            if not hasattr(User, att):
+        for attr, val in kwargs.items():
+            if not hasattr(User, attr):
                 raise InvalidRequestError()
-            attributes.append(getattr(User, att))
-            values.append(value)
+            attributes.append(getattr(User, attr))
+            values.append(val)
 
         # query = select(User).where(
         #     *(getattr(User, key) == value for key, value in kwargs.items())
