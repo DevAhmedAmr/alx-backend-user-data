@@ -49,6 +49,19 @@ class DB:
             user = None
         return user
 
+    def find_All_Users(self) -> User:
+        """
+        find_All_Users
+
+        Returns:
+            [Users]
+        """
+        query = select(User)
+        result = self._session.execute(query)
+        users = result.scalars().all()
+        print(users)
+        return users
+
     def find_user_by(self, **kwargs) -> User:
         """
         Find user by given kwargs .

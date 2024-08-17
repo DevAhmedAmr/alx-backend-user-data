@@ -3,7 +3,21 @@
 Flask app
 """
 from flask import Flask, jsonify
+from auth import Auth
+
 app = Flask(__name__)
+
+AUTH = Auth()
+
+
+@app.route("/", method=["POST"])
+def login():
+    """ home dir
+
+        Returns:
+                message
+        """
+    return jsonify({"message": "Bienvenue"})
 
 
 @app.route("/")
