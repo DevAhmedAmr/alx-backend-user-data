@@ -10,9 +10,28 @@ app = Flask(__name__)
 AUTH = Auth()
 
 
+@app.route("/sessions", methods=["DELETE"])
+def logout():
+    """
+    logout : deletes -> destroys session id
+    """
+    session_id = request.cookies.get('session_id')
+    if not session_id:
+        return 404
+
+    user = AUTH.get_user_from_session_id(session_id)
+
+    if not user:
+        return 403
+
+    AUTH.destroy_session(user.id)
+    return 200
+
+
 @app.route("/users", methods=["POST"])
 def register():
-    """ register a new user
+    """
+    register a new user
 
         Returns:
                 status 200 if created successfully or

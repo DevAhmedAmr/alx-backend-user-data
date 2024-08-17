@@ -99,7 +99,8 @@ class Auth:
             return None
 
     def destroy_session(self, user_id: str):
-        """ function to delete or destroy session
+        """
+        function to delete or destroy session
 
         Args:
             user_id (str): user id to destroy it's session
