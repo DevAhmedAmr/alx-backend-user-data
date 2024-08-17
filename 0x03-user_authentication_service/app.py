@@ -15,8 +15,8 @@ def profile():
     session_id = request.cookies.get("session_id")
     user = AUTH.get_user_from_session_id(session_id)
 
-    if not user:
-        return Response(status=403)
+    if not user or not session_id:
+        return abort(403)
 
     res = make_response(jsonify({"email": user.email}))
     res.status_code = 200
@@ -30,10 +30,13 @@ def logout():
     """
     session_id = request.cookies.get('session_id')
 
+    if not session_id:
+        return Response(status=403)
+
     user = AUTH.get_user_from_session_id(session_id)
 
     if not user:
-        return abort(403)
+        return Response(status=403)
 
     AUTH.destroy_session(user.id)
     return Response(status=302)
