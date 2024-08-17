@@ -62,7 +62,7 @@ class Auth:
 
         return checkpw(password.encode("utf-8"), user.hashed_password)
 
-    def _generate_uuid(self):
+    def _generate_uuid(self) -> str:
         """
         generate uuid
 
