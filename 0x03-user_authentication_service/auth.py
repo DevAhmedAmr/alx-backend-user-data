@@ -83,7 +83,8 @@ class Auth:
             return None
 
     def get_user_from_session_id(self, session_id: str) -> User:
-        """function to get user from_session id
+        """
+        function to get user from_session id
 
         Args:
             session_id (str)
@@ -96,6 +97,14 @@ class Auth:
 
         except NoResultFound:
             return None
+
+    def destroy_session(self, user_id: str):
+        """ function to delete or destroy session
+
+        Args:
+            user_id (str): user id to destroy it's session
+        """
+        self._db.update_user(user_id, session_id=None)
 
 
 def _hash_password(password: str) -> bytes:
