@@ -10,6 +10,18 @@ app = Flask(__name__)
 AUTH = Auth()
 
 
+@app.route("/reset_password", methods=["POST"])
+def reset_password():
+    email = request.form.get("email")
+
+    try:
+        token = AUTH.get_reset_password_token(email)
+    except ValueError:
+        return abort(403)
+
+    return make_response(jsonify(token))
+
+
 @app.route("/profile", methods=["GET"])
 def profile():
     session_id = request.cookies.get("session_id")
