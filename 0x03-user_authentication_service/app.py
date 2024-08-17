@@ -19,7 +19,9 @@ def reset_password():
     except ValueError:
         return abort(403)
 
-    return make_response(jsonify(token))
+    return make_response(
+        jsonify({"email": email, "reset_token": token})
+    )
 
 
 @app.route("/profile", methods=["GET"])
