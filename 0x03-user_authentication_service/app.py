@@ -4,7 +4,7 @@ Flask app
 """
 from flask import Flask, jsonify, request, abort, make_response
 from auth import Auth
-
+from flask import Response
 app = Flask(__name__)
 
 AUTH = Auth()
@@ -16,16 +16,17 @@ def logout():
     logout : deletes -> destroys session id
     """
     session_id = request.cookies.get('session_id')
+
     if not session_id:
-        return 404
+        return Response(status=404)
 
     user = AUTH.get_user_from_session_id(session_id)
 
     if not user:
-        return 403
+        return Response(status=403)
 
     AUTH.destroy_session(user.id)
-    return 200
+    return Response(status=302)
 
 
 @app.route("/users", methods=["POST"])
