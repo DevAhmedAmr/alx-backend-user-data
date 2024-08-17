@@ -62,6 +62,16 @@ class Auth:
 
         return checkpw(password.encode("utf-8"), user.hashed_password)
 
+    def _generate_uuid(self):
+        """
+        generate uuid
+
+        Returns:
+            str: uuid
+        """
+        from uuid import uuid4
+        return str(uuid4())
+
 
 def _hash_password(password: str) -> bytes:
     """
