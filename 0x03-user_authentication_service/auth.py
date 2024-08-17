@@ -62,6 +62,24 @@ class Auth:
 
         return checkpw(password.encode("utf-8"), user.hashed_password)
 
+    def create_session(self, email: str):
+        """
+        returns a new session Id
+
+        Args:
+            email (str): email
+
+        Returns:
+            [str]: a session string if user exists
+        """
+        try:
+
+            self._db.find_user_by(email=email)
+            return _generate_uuid()
+
+        except NoResultFound:
+            return None
+
 
 def _hash_password(password: str) -> bytes:
     """
