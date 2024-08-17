@@ -3,12 +3,10 @@
 Main file
 """
 from auth import Auth
-
+from app import AUTH
 email = 'bob@bob.com'
 password = 'MyPwdOfBob'
-auth = Auth()
 
-auth.register_user(email, password)
 
-print(auth.create_session(email))
-print(auth.create_session("unknown@email.com"))
+print(AUTH.get_user_from_session_id("a2b2c57d-56e3-4da0-84de-557d97a3128c"))
+print(AUTH._db.find_All_Users())
