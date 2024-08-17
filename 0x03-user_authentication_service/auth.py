@@ -62,7 +62,7 @@ class Auth:
 
         return checkpw(password.encode("utf-8"), user.hashed_password)
 
-    def create_session(self, email: str):
+    def create_session(self, email: str) -> str:
         """
         returns a new session Id
 
