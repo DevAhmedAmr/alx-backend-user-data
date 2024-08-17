@@ -10,6 +10,19 @@ app = Flask(__name__)
 AUTH = Auth()
 
 
+@app.route("/profile", methods=["GET"])
+def profile():
+    session_id = request.cookies.get("session_id")
+    user = AUTH.get_user_from_session_id(session_id)
+
+    if not user:
+        return Response(status=403)
+
+    res = make_response(jsonify({"email": user.email}))
+    res.status_code = 200
+    return res
+
+
 @app.route("/sessions", methods=["DELETE"])
 def logout():
     """
