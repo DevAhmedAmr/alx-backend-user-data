@@ -1,24 +1,22 @@
 #!/usr/bin/env python3
-"""
-Flask app
-"""
+"""Flask app."""
 from flask import Flask, jsonify, request, abort, make_response
 from auth import Auth
 from flask import Response
-app = Flask(__name__)
 
+app = Flask(__name__)
 AUTH = Auth()
 
 
 @app.route("/reset_password", methods=["PUT"])
 def update_password():
-    """
-    PUT End point to reset password
-    it requires: email , token and new password
+    """PUT End point to reset password.
+
+    It requires: email, token, and new password.
 
     Returns:
-        Response: 200 if success .
-                403 if user does not exist
+        Response: 200 if success.
+                  403 if user does not exist.
     """
     email = request.form.get("email")
     reset_token = request.form.get("reset_token")
@@ -36,15 +34,13 @@ def update_password():
 
 @app.route("/reset_password", methods=["POST"])
 def reset_password():
-    """
-    Post End point to get reset_password token
-    it requires: email
+    """POST End point to get reset_password token.
+
+    It requires: email.
 
     Returns:
-        Response:
-
-        reset_password token and  200 if success .
-        403 if user does not exist
+        Response: Reset_password token and 200 if success.
+                  403 if user does not exist.
     """
     email = request.form.get("email")
 
@@ -60,14 +56,13 @@ def reset_password():
 
 @app.route("/profile", methods=["GET"])
 def profile():
-    """
-    GET End point to get user profile via session_id
-    it requires: session_id
+    """GET End point to get user profile via session_id.
+
+    It requires: session_id.
 
     Returns:
-        Response:
-        dictionary of user profile and 200 .
-            or    403 if session id is invalid
+        Response: Dictionary of user profile and 200.
+                  403 if session id is invalid.
     """
     session_id = request.cookies.get("session_id")
     user = AUTH.get_user_from_session_id(session_id)
@@ -82,9 +77,7 @@ def profile():
 
 @app.route("/sessions", methods=["DELETE"])
 def logout():
-    """
-    logout : deletes -> destroys session id
-    """
+    """Logout: deletes -> destroys session id."""
     session_id = request.cookies.get('session_id')
 
     if not session_id:
@@ -101,21 +94,18 @@ def logout():
 
 @app.route("/users", methods=["POST"])
 def register():
-    """
-    register a new user
+    """Register a new user.
 
-        Returns:
-                status 200 if created successfully or
-                400 if user already exist
-        """
+    Returns:
+        Status 200 if created successfully.
+        400 if user already exists.
+    """
     email = request.form.get("email")
     password = request.form.get("password")
 
     if email and password:
-
         try:
             AUTH.register_user(email, password)
-
             return jsonify(
                 {"email": email, "message": "user created"}
             )
@@ -127,12 +117,11 @@ def register():
 
 @app.route("/sessions", methods=["POST"])
 def login():
-    """
-        endpoint to login and returns session id as a response cookie
+    """Endpoint to login and returns session id as a response cookie.
 
     Returns:
-        [response]: response confirming succeeded in logging in  or not
-        session id as a response cookie
+        Response: Response confirming succeeded in logging in or not.
+                  Session id as a response cookie.
     """
     email = request.form.get("email")
     password = request.form.get("password")
@@ -143,19 +132,17 @@ def login():
     session = AUTH.create_session(email)
 
     res = make_response(jsonify({"email": email, "message": "logged in"}))
-
     res.set_cookie("session_id", session)
-
     return res
 
 
 @app.route("/")
 def home():
-    """ home dir
+    """Home directory.
 
-        Returns:
-                message
-        """
+    Returns:
+        Response: A JSON message 'Bienvenue'.
+    """
     return jsonify({"message": "Bienvenue"})
 
 

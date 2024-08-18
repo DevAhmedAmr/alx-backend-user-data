@@ -1,17 +1,14 @@
 #!/usr/bin/env python3
 
-"""
-Create a user - friendly SQLAlchemy class .
-"""
+"""Create a user - friendly SQLAlchemy class ."""
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 Base = declarative_base()
 
 
 class User(Base):
-    """
-    Class method to create a user .
-    """
+    """Class method to create a user ."""
+
     __tablename__ = 'users'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
