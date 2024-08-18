@@ -7,5 +7,11 @@ from app import AUTH
 email = 'bob@bob.com'
 password = 'MyPwdOfBob'
 
-USER = AUTH.get_user_from_session_id("741c6e65-ed07-40db-be26-2c31ff6eaa41")
-print("SESSION= ", USER.session_id)
+user = AUTH._db.find_user_by(email=email)
+print(user.hashed_password)
+reset_token = AUTH.get_reset_password_token(email)
+print("toeken= ", AUTH._db.find_user_by(email=email).reset_token)
+
+AUTH.update_password(reset_token, "new_password")
+print(AUTH._db.find_user_by(email=email).hashed_password)
+print(AUTH._db.find_user_by(email=email).reset_token)

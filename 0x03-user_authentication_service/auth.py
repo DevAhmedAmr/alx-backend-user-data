@@ -130,6 +130,29 @@ class Auth:
         except NoResultFound:
             raise ValueError
 
+    def update_password(self, reset_token: str, password):
+        """
+        AI is creating summary for update_password
+
+        Args:
+            reset_token (str): [description]
+            password ([type]): [description]
+
+        Raises:
+            ValueError: [description]
+        """
+        try:
+            user = self._db.find_user_by(reset_token=reset_token)
+
+        except NoResultFound:
+            raise ValueError
+
+        self._db.update_user(
+            user.id,
+            hashed_password=_hash_password(password),
+            reset_token=None
+        )
+
 
 def _hash_password(password: str) -> bytes:
     """
