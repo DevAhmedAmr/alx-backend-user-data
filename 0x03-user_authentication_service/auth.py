@@ -8,25 +8,25 @@ from bcrypt import checkpw
 
 
 class Auth:
-    """Auth class to interact with the authentication database."""
+    """Class to interact with the authentication database."""
 
     def __init__(self):
-        """constructor."""
+        """Initialize the Auth class with a database instance."""
         self._db = DB()
 
     def register_user(self, email: str, password: str) -> User:
         """
-        register a new user
+        Register a new user.
 
         Args:
-            email (str)
-            password (str)
+            email (str): User's email.
+            password (str): User's password.
 
         Raises:
-            ValueError : if user already exist
+            ValueError: If the user already exists.
 
         Returns:
-            newly created User obj
+            User: The newly created User object.
         """
         try:
             self._db.find_user_by(email=email)
@@ -41,15 +41,14 @@ class Auth:
 
     def valid_login(self, email: str, password: str) -> bool:
         """
-        verify Credentials for email and password
+        Verify credentials for email and password.
 
         Args:
-            email (str)
-            password (str)
+            email (str): User's email.
+            password (str): User's password.
 
         Returns:
-            bool: True if email and password are correct otherwise
-                  False
+            bool: True if the credentials are correct, otherwise False.
         """
         try:
 
@@ -62,13 +61,13 @@ class Auth:
 
     def create_session(self, email: str) -> str:
         """
-        returns a new session Id
+        Create a new session ID.
 
         Args:
-            email (str): email
+            email (str): User's email.
 
         Returns:
-            [str]: a session string if user exists
+            str: The session string if the user exists, otherwise None.
         """
         try:
 
@@ -82,13 +81,14 @@ class Auth:
 
     def get_user_from_session_id(self, session_id: str) -> User:
         """
-        function to get user from_session id
+        Retrieve a user based on the session ID.
 
         Args:
-            session_id (str)
+            session_id (str): The session ID.
 
         Returns:
-            User: user obj that is linked to session id
+            User: The User object linked to the session ID, or
+            None if not found.
         """
         try:
             return self._db.find_user_by(session_id=session_id)
@@ -98,25 +98,25 @@ class Auth:
 
     def destroy_session(self, user_id: str):
         """
-        function to delete or destroy session
+        Destroy the session for the given user ID.
 
         Args:
-            user_id (str): user id to destroy it's session
+            user_id (str): The user's ID.
         """
         self._db.update_user(user_id, session_id=None)
 
     def get_reset_password_token(self, email: str) -> str:
         """
-        - Find the user corresponding to the email.
-        - If the user does not exist, raise a ValueError exception
-        - If it exists, generate a UUID and update the user’s
-            reset_token database field.
+        Generate a reset password token.
 
         Args:
-            email (str)
+            email (str): The user's email.
 
         Returns:
-            str: reset token
+            str: The reset token.
+
+        Raises:
+            ValueError: If the user does not exist.
         """
         try:
 
@@ -130,14 +130,14 @@ class Auth:
 
     def update_password(self, reset_token: str, password):
         """
-        AI is creating summary for update_password
+        Update the user's password.
 
         Args:
-            reset_token (str): [description]
-            password ([type]): [description]
+            reset_token (str): The reset token.
+            password (str): The new password.
 
         Raises:
-            ValueError: [description]
+            ValueError: If the reset token is invalid.
         """
         try:
             user = self._db.find_user_by(reset_token=reset_token)
@@ -154,13 +154,13 @@ class Auth:
 
 def _hash_password(password: str) -> bytes:
     """
-    function to hash a password
+    Hash a password.
 
     Args:
-        password (str): pw to be hashed
+        password (str): The password to be hashed.
 
     Returns:
-        bytes: hashed password
+        bytes: The hashed password.
     """
     bytes = password.encode('utf-8')
     salt = gensalt()
@@ -170,10 +170,10 @@ def _hash_password(password: str) -> bytes:
 
 def _generate_uuid() -> str:
     """
-    generate uuid
+    Generate a UUID.
 
     Returns:
-        str: uuid
+        str: The generated UUID.
     """
     from uuid import uuid4
     return str(uuid4())

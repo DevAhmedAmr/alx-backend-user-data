@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-"""DB module
-"""
+"""DB module."""
+
 from sqlalchemy import create_engine, tuple_
 from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.orm import sessionmaker
@@ -13,12 +13,10 @@ from sqlalchemy import update
 
 
 class DB:
-    """DB class
-    """
+    """DB class."""
 
     def __init__(self) -> None:
-        """Initialize a new DB instance
-        """
+        """Initialize a new DB instance."""
         self._engine = create_engine("sqlite:///a.db", echo=False)
         Base.metadata.drop_all(self._engine)
         Base.metadata.create_all(self._engine)
@@ -26,16 +24,14 @@ class DB:
 
     @property
     def _session(self) -> Session:
-        """Memoized session object
-        """
+        """Memoized session object."""
         if self.__session is None:
             DBSession = sessionmaker(bind=self._engine)
             self.__session = DBSession()
         return self.__session
 
     def add_user(self, email: str, hashed_password: str) -> User:
-        """Add a user to the db .
-                """
+        """Add a user to the database."""
         try:
 
             user = User()
@@ -51,7 +47,7 @@ class DB:
 
     def find_All_Users(self) -> User:
         """
-        find_All_Users
+        Find and return all users.
 
         Returns:
             [Users]
@@ -63,9 +59,7 @@ class DB:
         return users
 
     def find_user_by(self, **kwargs) -> User:
-        """
-        Find user by given kwargs .
-                """
+        """Find a user by given keyword arguments."""
         attributes = []
         values = []
 
