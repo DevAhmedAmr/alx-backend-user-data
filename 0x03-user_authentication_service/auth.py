@@ -1,133 +1,147 @@
 #!/usr/bin/env python3
 """Authentication module."""
-
-from bcrypt import hashpw, gensalt, checkpw
+from bcrypt import hashpw, gensalt
 from db import DB
 from user import User
 from sqlalchemy.orm.exc import NoResultFound
+from bcrypt import checkpw
 
 
 class Auth:
-    """Class to interact with the authentication database."""
+    """Auth class to interact with the authentication database."""
 
     def __init__(self):
-        """Initialize the Auth class with a database instance."""
+        """constructor."""
         self._db = DB()
 
     def register_user(self, email: str, password: str) -> User:
         """
-        Register a new user.
+        register a new user
 
         Args:
-            email (str): User's email.
-            password (str): User's password.
+            email (str)
+            password (str)
 
         Raises:
-            ValueError: If the user already exists.
+            ValueError : if user already exist
 
         Returns:
-            User: The newly created User object.
+            newly created User obj
         """
         try:
             self._db.find_user_by(email=email)
+
         except NoResultFound:
+
             return self._db.add_user(
-                email=email, hashed_password=_hash_password(password))
-        raise ValueError(f"User {email} already exists.")
+                email=email,
+                hashed_password=_hash_password(password))
+
+        raise ValueError(f"User {email} already exists")
 
     def valid_login(self, email: str, password: str) -> bool:
         """
-        Verify credentials for email and password.
+        verify Credentials for email and password
 
         Args:
-            email (str): User's email.
-            password (str): User's password.
+            email (str)
+            password (str)
 
         Returns:
-            bool: True if the credentials are correct, otherwise False.
+            bool: True if email and password are correct otherwise
+                  False
         """
         try:
+
             user = self._db.find_user_by(email=email)
+
         except NoResultFound:
             return False
+
         return checkpw(password.encode("utf-8"), user.hashed_password)
 
     def create_session(self, email: str) -> str:
         """
-        Create a new session ID.
+        returns a new session Id
 
         Args:
-            email (str): User's email.
+            email (str): email
 
         Returns:
-            str: The session string if the user exists, otherwise None.
+            [str]: a session string if user exists
         """
         try:
+
             user = self._db.find_user_by(email=email)
             uuid = _generate_uuid()
             self._db.update_user(user_id=user.id, session_id=uuid)
             return uuid
+
         except NoResultFound:
             return None
 
     def get_user_from_session_id(self, session_id: str) -> User:
         """
-        Retrieve a user based on the session ID.
+        function to get user from_session id
 
         Args:
-            session_id (str): The session ID.
+            session_id (str)
 
         Returns:
-            User: The User object linked to the session ID, or None if not found.
+            User: user obj that is linked to session id
         """
         try:
             return self._db.find_user_by(session_id=session_id)
+
         except NoResultFound:
             return None
 
     def destroy_session(self, user_id: str):
         """
-        Destroy the session for the given user ID.
+        function to delete or destroy session
 
         Args:
-            user_id (str): The user's ID.
+            user_id (str): user id to destroy it's session
         """
         self._db.update_user(user_id, session_id=None)
 
     def get_reset_password_token(self, email: str) -> str:
         """
-        Generate a reset password token.
+        - Find the user corresponding to the email.
+        - If the user does not exist, raise a ValueError exception
+        - If it exists, generate a UUID and update the user’s
+            reset_token database field.
 
         Args:
-            email (str): The user's email.
+            email (str)
 
         Returns:
-            str: The reset token.
-
-        Raises:
-            ValueError: If the user does not exist.
+            str: reset token
         """
         try:
+
             user = self._db.find_user_by(email=email)
             reset_token = _generate_uuid()
             self._db.update_user(user.id, reset_token=reset_token)
             return reset_token
+
         except NoResultFound:
             raise ValueError
 
-    def update_password(self, reset_token: str, password: str):
+    def update_password(self, reset_token: str, password):
         """
-        Update the user's password.
+        AI is creating summary for update_password
 
         Args:
-            reset_token (str): The reset token.
-            password (str): The new password.
+            reset_token (str): [description]
+            password ([type]): [description]
 
         Raises:
-            ValueError: If the reset token is invalid.
+            ValueError: [description]
         """
         try:
             user = self._db.find_user_by(reset_token=reset_token)
+
         except NoResultFound:
             raise ValueError
 
@@ -140,26 +154,26 @@ class Auth:
 
 def _hash_password(password: str) -> bytes:
     """
-    Hash a password.
+    function to hash a password
 
     Args:
-        password (str): The password to be hashed.
+        password (str): pw to be hashed
 
     Returns:
-        bytes: The hashed password.
+        bytes: hashed password
     """
-    bytes_password = password.encode('utf-8')
+    bytes = password.encode('utf-8')
     salt = gensalt()
-    hashed = hashpw(bytes_password, salt)
-    return hashed
+    hash = hashpw(bytes, salt)
+    return hash
 
 
 def _generate_uuid() -> str:
     """
-    Generate a UUID.
+    generate uuid
 
     Returns:
-        str: The generated UUID.
+        str: uuid
     """
     from uuid import uuid4
     return str(uuid4())

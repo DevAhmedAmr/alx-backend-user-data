@@ -1,18 +1,24 @@
 #!/usr/bin/env python3
-"""DB module."""
-from sqlalchemy import create_engine
+"""DB module
+"""
+from sqlalchemy import create_engine, tuple_
 from sqlalchemy.exc import InvalidRequestError
-from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm.session import Session
 from sqlalchemy.orm.exc import NoResultFound
 from user import Base, User
 from sqlalchemy import select
+from sqlalchemy import and_
+from sqlalchemy import update
 
 
 class DB:
-    """DB class."""
+    """DB class
+    """
 
     def __init__(self) -> None:
-        """Initialize a new DB instance."""
+        """Initialize a new DB instance
+        """
         self._engine = create_engine("sqlite:///a.db", echo=False)
         Base.metadata.drop_all(self._engine)
         Base.metadata.create_all(self._engine)
@@ -20,25 +26,36 @@ class DB:
 
     @property
     def _session(self) -> Session:
-        """Memoized session object."""
+        """Memoized session object
+        """
         if self.__session is None:
             DBSession = sessionmaker(bind=self._engine)
             self.__session = DBSession()
         return self.__session
 
     def add_user(self, email: str, hashed_password: str) -> User:
-        """Add a user to the database."""
+        """Add a user to the db .
+                """
         try:
-            user = User(email=email, hashed_password=hashed_password)
+
+            user = User()
+            user.email = email
+            user.hashed_password = hashed_password
             self._session.add(user)
             self._session.commit()
+
         except Exception:
             self._session.rollback()
             user = None
         return user
 
-    def find_all_users(self) -> list[User]:
-        """Find and return all users."""
+    def find_All_Users(self) -> User:
+        """
+        find_All_Users
+
+        Returns:
+            [Users]
+        """
         query = select(User)
         result = self._session.execute(query)
         users = result.scalars().all()
@@ -46,25 +63,58 @@ class DB:
         return users
 
     def find_user_by(self, **kwargs) -> User:
-        """Find a user by given keyword arguments."""
-        for attr in kwargs:
-            if not hasattr(User, attr):
+        """
+        Find user by given kwargs .
+                """
+        attributes = []
+        values = []
+
+        for att, value in kwargs.items():
+
+            if not hasattr(User, att):
                 raise InvalidRequestError()
+            attributes.append(att)
+            values.append(value)
 
-        user = self._session.query(User).filter_by(**kwargs).first()
+        # query = select(User).where(
+        #     *(getattr(User, key) == value for key, value in kwargs.items())
+        #     )
+        # user = self._session.scalar(query)
 
-        if user is None:
+        query = self._session.query(User)
+
+        conditions = [
+            getattr(User, key) == value for key,
+            value in kwargs.items()
+        ]
+
+        user = query.filter(*conditions).first()
+
+        if not user:
             raise NoResultFound()
 
         return user
 
     def update_user(self, user_id: int, **kwargs) -> None:
-        """Update a user by ID."""
-        user = self.find_user_by(id=user_id)
+        """Update a user by ID .
+
+        Args:
+            user_id (int): id of user to be updated
+            **kwargs: attributes to be updated
+        Raises:
+            ValueError: if attribute to be updated does not exist
+            in User table
+
+        Returns:
+            None
+        """
+        user = self.find_user_by(**{"id": user_id})
+        session = self._session
 
         for attr, value in kwargs.items():
             if not hasattr(User, attr):
-                raise ValueError(f"Attribute '{attr}' does not exist.")
-            setattr(user, attr, value)
+                raise ValueError
+            user.__setattr__(attr, value)
 
-        self._session.commit()
+        session.commit()
+        return None
