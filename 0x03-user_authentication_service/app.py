@@ -12,6 +12,14 @@ AUTH = Auth()
 
 @app.route("/reset_password", methods=["PUT"])
 def update_password():
+    """
+    PUT End point to reset password
+    it requires: email , token and new password
+
+    Returns:
+        Response: 200 if success .
+                403 if user does not exist
+    """
     email = request.form.get("email")
     reset_token = request.form.get("reset_token")
     new_password = request.form.get("new_password")
@@ -28,6 +36,16 @@ def update_password():
 
 @app.route("/reset_password", methods=["POST"])
 def reset_password():
+    """
+    Post End point to get reset_password token
+    it requires: email
+
+    Returns:
+        Response:
+
+        reset_password token and  200 if success .
+        403 if user does not exist
+    """
     email = request.form.get("email")
 
     try:
@@ -42,6 +60,15 @@ def reset_password():
 
 @app.route("/profile", methods=["GET"])
 def profile():
+    """
+    GET End point to get user profile via session_id
+    it requires: session_id
+
+    Returns:
+        Response:
+        dictionary of user profile and 200 .
+            or    403 if session id is invalid
+    """
     session_id = request.cookies.get("session_id")
     user = AUTH.get_user_from_session_id(session_id)
 
