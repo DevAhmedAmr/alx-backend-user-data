@@ -9,7 +9,7 @@ AUTH = Auth()
 
 
 @app.route("/reset_password", methods=["PUT"])
-def update_password():
+def update_password() -> str:
     """PUT End point to reset password.
 
     It requires: email, token, and new password.
